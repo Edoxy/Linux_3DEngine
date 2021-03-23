@@ -1,19 +1,19 @@
-#include "headers/Points2d.hpp"
+#include "headers/Point2d.hpp"
 #include <math.h>
 
-Points2d::Points2d(float x1, float y1)
+Point2d::Point2d(float x1, float y1)
 {
     x = x1;
     y = y1;
 }
 
-Points2d::Points2d(const Points2d & point)
+Point2d::Point2d(const Point2d & point)
 {
     x = point.x;
     y = point.y;
 }
 
-double Points2d::norm(unsigned int n = 2)
+double Point2d::norm(unsigned int n = 2)
 {
     float norm;
     if (n = 2)

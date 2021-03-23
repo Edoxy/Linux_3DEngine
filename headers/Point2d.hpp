@@ -1,14 +1,16 @@
-class Points2d
+#pragma once
+
+class Point2d
 {
     private:
     float x;
     float y;
 
     public:
-    Points2d();
-    Points2d(float, float);
-    Points2d(const Points2d &);
-    ~Points2d();
+    Point2d();
+    Point2d(float, float);
+    Point2d(const Point2d &);
+    ~Point2d();
 
     float Getx(){return x;};
     float Gety(){return y;};
