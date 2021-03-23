@@ -5,23 +5,23 @@
 
 using namespace std;
 
-Mesh3d::Mesh3d(const Mesh3d& mesh)
+Mesh3d::Mesh3d(const Mesh3d &mesh)
 {
     numberOfPoints = mesh.numberOfPoints;
     for (int i = 0; i < numberOfPoints; i++)
     {
-        Point3d * p = new Point3d(*mesh.Points[i]);
+        Point3d *p = new Point3d(*mesh.Points[i]);
         Points.push_back(p);
     }
 }
 
-void Mesh3d::addPoint(Point3d& point)
+void Mesh3d::addPoint(Point3d &point)
 {
-    numberOfPoints ++;
+    numberOfPoints++;
     Points.push_back(&point);
 }
 
-const Point3d* Mesh3d::getPoint(int pos) const
+const Point3d *Mesh3d::getPoint(int pos) const
 {
     if (pos >= numberOfPoints)
     {

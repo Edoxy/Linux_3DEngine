@@ -6,7 +6,8 @@ Ray::Ray(Point3d t, Point3d p, bool is_point)
     if (is_point)
     {
         compute_points(t, p);
-    }else
+    }
+    else
     {
         Tangent = t;
         Point = p;

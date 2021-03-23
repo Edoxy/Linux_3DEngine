@@ -17,16 +17,16 @@ bool test()
     ///TESTING 3D POINTS
     cout << "TESTING 3D POINTS" << endl;
     vector<Point3d *> rnd_mesh;
-    
+
     const unsigned int UNITS = 10;
 
     cout << "COORDINATES:" << endl;
     for (int i = 0; i < UNITS; i++)
     {
         //creation of random 3d points
-        float x = rand()/3.0;
-        float y = rand()/3.0;
-        float z = rand()/3.0;
+        float x = rand() / 3.0;
+        float y = rand() / 3.0;
+        float z = rand() / 3.0;
 
         cout << x << " " << y << " " << z << endl;
 
@@ -34,34 +34,34 @@ bool test()
     }
     //print the coordinates
     cout << "THIS ARE THE POINTS THAT WERE CREATED:" << endl;
-    for (Point3d* p : rnd_mesh)
+    for (Point3d *p : rnd_mesh)
     {
-        cout << ". : " << p -> Getx() << " " << p->Gety() << " " << p->Getz() << endl;
+        cout << ". : " << p->Getx() << " " << p->Gety() << " " << p->Getz() << endl;
         cout << p->norm() << endl;
     }
     cout << "NORMALIZE TEST:" << endl;
-    for (Point3d* x : rnd_mesh)
+    for (Point3d *x : rnd_mesh)
     {
-        Point3d* p = x->normalize();
-        cout << ". : " << p -> Getx() << " " << p->Gety() << " " << p->Getz() << endl;
+        Point3d *p = x->normalize();
+        cout << ". : " << p->Getx() << " " << p->Gety() << " " << p->Getz() << endl;
         cout << p->norm() << endl;
     }
     ///TESTING MESH 3D
-    cout <<"TESTING 3D MESH" << endl;
+    cout << "TESTING 3D MESH" << endl;
 
     Mesh3d *mesh = new Mesh3d();
-    for (Point3d* x : rnd_mesh)
+    for (Point3d *x : rnd_mesh)
     {
-        Point3d* p = x->normalize();
+        Point3d *p = x->normalize();
         mesh->addPoint(*p);
     }
     for (int i = 0; i < mesh->Getn_points(); i++)
     {
         const Point3d *p = mesh->getPoint(i);
-        cout << "MESH : " << p -> Getx() << " " << p->Gety() << " " << p->Getz() << endl;
+        cout << "MESH : " << p->Getx() << " " << p->Gety() << " " << p->Getz() << endl;
     }
     //TESTING CAMERA
-    cout <<"TESTING CAMERA" << endl;
+    cout << "TESTING CAMERA" << endl;
 
     cout << "TEST FINISHED" << endl;
     return true;
@@ -70,5 +70,4 @@ bool test()
 int main()
 {
     //cout << test();
-    
 }

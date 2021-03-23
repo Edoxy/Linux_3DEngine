@@ -6,7 +6,7 @@
 
 class Camera
 {
-    private:
+private:
     //Position of the observer
     Point3d position;
     //Orientation of the observer
@@ -15,9 +15,9 @@ class Camera
     float angle;
     bool ortho = false;
     //vector of the streight lines prgected from the mesh
-    std::vector <Ray*> rays;
+    std::vector<Ray *> rays;
 
-    public:
+public:
     Camera(){};
     Camera(Point3d);
     Camera(const Camera &);
@@ -28,7 +28,7 @@ class Camera
     void reset();
     void set_angle(float);
     void orth(bool);
-    void compute_rays(const Mesh3d&);
+    void compute_rays(const Mesh3d &);
 
-    Ray * GetRay(int i) const;
+    Ray *GetRay(int i) const;
 };

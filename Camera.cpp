@@ -12,7 +12,7 @@ Camera::Camera(Point3d p)
     angle = 50;
 }
 
-Camera::Camera(const Camera& cam)
+Camera::Camera(const Camera &cam)
 {
     position = cam.position;
     normal = cam.normal;
@@ -24,7 +24,7 @@ void Camera::move_to(Point3d p)
     position = p;
 }
 
-void Camera::rotate(Point3d& p)
+void Camera::rotate(Point3d &p)
 {
     normal = *p.normalize();
 }
@@ -46,27 +46,28 @@ void Camera::orth(bool is)
     ortho = is;
 }
 
-void Camera::compute_rays(const Mesh3d & mesh)
+void Camera::compute_rays(const Mesh3d &mesh)
 {
     const int n = mesh.Getn_points();
     if (!ortho)
     {
-        for(int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
-            Ray* temp_ray = new Ray(*mesh.getPoint(i), position);
+            Ray *temp_ray = new Ray(*mesh.getPoint(i), position);
             rays.push_back(temp_ray);
         }
     }
 }
 
-Ray* Camera::GetRay(int i) const
+Ray *Camera::GetRay(int i) const
 {
     if (i >= rays.size())
     {
         cout << "ERROR!: Out of index point" << endl;
         //Return a reference to a temporary variable
         return new Ray();
-    }else
+    }
+    else
     {
         return rays[i];
     }
