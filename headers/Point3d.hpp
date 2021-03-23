@@ -16,11 +16,14 @@ class Point3d
     void Sety(double y1){y = y1;};
     void Setz(double z1){z = z1;};
 
-    const double Getx(){return x;};
-    const double Gety(){return y;};
-    const double Getz(){return z;};
+    const double Getx() const {return x;};
+    const double Gety() const {return y;};
+    const double Getz() const {return z;};
 
     double norm();
     Point3d* normalize();
+
+    Point3d operator+(Point3d &);
+    Point3d operator-(Point3d &);
     
 };
