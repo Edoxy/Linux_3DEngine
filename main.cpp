@@ -1,11 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <string>
-#include "headers/Point2d.hpp"
-#include "headers/Point3d.hpp"
-#include "headers/Camera.hpp"
-#include "headers/Display.hpp"
-#include "headers/Mesh3d.hpp"
+#include "header.hpp"
 
 using namespace std;
 
@@ -18,7 +11,7 @@ bool test()
     cout << "TESTING 3D POINTS" << endl;
     vector<Point3d *> rnd_mesh;
 
-    const unsigned int UNITS = 10;
+    const unsigned int UNITS = 2;
 
     cout << "COORDINATES:" << endl;
     for (int i = 0; i < UNITS; i++)
@@ -36,16 +29,25 @@ bool test()
     cout << "THIS ARE THE POINTS THAT WERE CREATED:" << endl;
     for (Point3d *p : rnd_mesh)
     {
-        cout << ". : " << p->Getx() << " " << p->Gety() << " " << p->Getz() << endl;
+        cout << ". : " << *p;
         cout << p->norm() << endl;
     }
     cout << "NORMALIZE TEST:" << endl;
     for (Point3d *x : rnd_mesh)
     {
         Point3d *p = x->normalize();
-        cout << ". : " << p->Getx() << " " << p->Gety() << " " << p->Getz() << endl;
+        cout << ". : " << *p;
         cout << p->norm() << endl;
     }
+    //TEST SCALAR PRODUCT
+    cout << "TEST SCALAR PRODUCT" << endl;
+    Point3d e1 = Point3d(1, 0, 0);
+    Point3d e2 = Point3d(0, 1, 0);
+    Point3d e3 = Point3d(0, 0, 1);
+    cout << e1 * e1 << endl;
+    cout << e1 * e2 << endl;
+    cout << e2 * e3 << endl;
+    cout << e3 * e1 << endl;
     ///TESTING MESH 3D
     cout << "TESTING 3D MESH" << endl;
 
@@ -58,10 +60,23 @@ bool test()
     for (int i = 0; i < mesh->Getn_points(); i++)
     {
         const Point3d *p = mesh->getPoint(i);
-        cout << "MESH : " << p->Getx() << " " << p->Gety() << " " << p->Getz() << endl;
+        cout << "MESH : " << *p;
     }
     //TESTING CAMERA
     cout << "TESTING CAMERA" << endl;
+    
+    cout << "TESTING PLANE..." << endl;
+    Plane2d * pi = new Plane2d(Point3d(2, 0, 0), Point3d(0, 0, 0));
+    cout << pi->getNormal() << pi->getPoint();
+
+    cout << "TESTING RAY..." << endl;
+    Ray * ray = new Ray(Point3d(-1, 0, 0), Point3d(1, 1, 0));
+    cout << ray->getTangent() << ray->getPoint();
+
+    cout << "TESTING INTERSECTION" << endl;
+ 
+    Point3d * p = pi->compute_intersection(ray);
+    cout << "INTERSECTION : " << *p;
 
     cout << "TEST FINISHED" << endl;
     return true;
@@ -69,5 +84,7 @@ bool test()
 
 int main()
 {
-    //cout << test();
+    cout << test();
+
 }
+

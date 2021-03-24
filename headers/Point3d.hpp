@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+#include <string>
 
 class Point3d
 {
@@ -25,4 +27,7 @@ public:
 
     Point3d operator+(Point3d &);
     Point3d operator-(Point3d &);
+    double operator*(Point3d &);
+
+    friend std::ostream &operator<<(std::ostream &, const Point3d &);
 };
