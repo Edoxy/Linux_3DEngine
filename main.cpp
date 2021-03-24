@@ -147,7 +147,7 @@ int main()
         display.Draw(cam);
         cam.reset();
 
-        t = t + 0.0006;
+        t = t + 0.0008;
     }
 }
 

@@ -62,9 +62,9 @@ void Camera::compute_rays(const Mesh3d &mesh)
         for (int i = 0; i < n; i++)
         {
             Point3d t = *mesh.getPoint(i);
-            t = t - Position;
-            Ray *temp_ray = new Ray(t, Position);
-            rays.push_back(temp_ray);
+            Ray *tmp_ray = new Ray();
+            tmp_ray->compute_points(t, Position);
+            rays.push_back(tmp_ray);
         }
     }
 }
@@ -74,8 +74,13 @@ void Camera::compute_plane()
     Point3d P_plane = Position + Normal;
     plane = new Plane2d(Normal, P_plane);
 
-    Oriz = *Point3d(1, -(Normal.Getx() / Normal.Gety()),0).normalize();
-    Vert = Oriz.x_vett(Normal);
+    Vert = *Point3d(1, -(Normal.Getx() / Normal.Gety()),0).normalize();
+    Oriz = *Vert.x_vett(Normal).normalize();
+    if ( Oriz.Getz() < 0)
+    {
+        Vert =  *Point3d(-1, (Normal.Getx() / Normal.Gety()),0).normalize();
+        Oriz = *Vert.x_vett(Normal).normalize();
+    }
 }
 
 void Camera::compute_view()
