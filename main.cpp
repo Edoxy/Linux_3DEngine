@@ -104,7 +104,7 @@ int main()
     fputs("\e[?25l", stdout);
     //cout << test();
     Mesh3d mesh;
-    mesh.addPoint(new Point3d(1, 1, 1));
+    /*mesh.addPoint(new Point3d(1, 1, 1));
     mesh.addPoint(new Point3d(0, 1, 1));
     mesh.addPoint(new Point3d(-1, 1, 1));
     mesh.addPoint(new Point3d(-1, 0, 1));
@@ -123,9 +123,41 @@ int main()
     mesh.addPoint(new Point3d(0, -1, -1));
     mesh.addPoint(new Point3d(1, -1, -1));
     mesh.addPoint(new Point3d(1, -1, 0));
-    mesh.addPoint(new Point3d(1, -0, -1));
+    mesh.addPoint(new Point3d(1, -0, -1));*/
+    //creating a CUBE
+    const double k = 40;
+    for (float i = 1; i <= k; i ++)
+    {
+        mesh.addPoint(new Point3d(i/k, 1, 1));
+        mesh.addPoint(new Point3d(-i/k, 1, 1));
+        mesh.addPoint(new Point3d(1, i/k, 1));
+        mesh.addPoint(new Point3d(1, -i/k, 1));
+        mesh.addPoint(new Point3d(1, 1, i/k));
+        mesh.addPoint(new Point3d(1, 1, -i/k));
 
-    const float radius = 4;
+        mesh.addPoint(new Point3d(i/k, -1, -1));
+        mesh.addPoint(new Point3d(-i/k, -1, -1));
+        mesh.addPoint(new Point3d(-1, i/k, -1));
+        mesh.addPoint(new Point3d(-1, -i/k, -1));
+        mesh.addPoint(new Point3d(-1, -1, i/k));
+        mesh.addPoint(new Point3d(-1, -1, -i/k));
+
+        mesh.addPoint(new Point3d(i/k, 1, -1));
+        mesh.addPoint(new Point3d(-i/k, 1, -1));
+        mesh.addPoint(new Point3d(1, i/k, -1));
+        mesh.addPoint(new Point3d(1, -i/k, -1));
+        mesh.addPoint(new Point3d(-1, 1, i/k));
+        mesh.addPoint(new Point3d(-1, 1, -i/k));
+
+        mesh.addPoint(new Point3d(i/k, -1, 1));
+        mesh.addPoint(new Point3d(-i/k, -1, 1));
+        mesh.addPoint(new Point3d(-1, i/k, 1));
+        mesh.addPoint(new Point3d(-1, -i/k, 1));
+        mesh.addPoint(new Point3d(1, -1, i/k));
+        mesh.addPoint(new Point3d(1, -1, -i/k));
+    }
+
+    float radius = 4;
 
     Camera cam(Point3d(0, radius, 0));
 
@@ -133,7 +165,7 @@ int main()
 
     float t = 0;
 
-    while(true)
+    while(t < 6.28)
     {
         printf( "\e[2j\e[H" );
         display.Clear();
