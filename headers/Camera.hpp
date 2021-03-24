@@ -10,15 +10,18 @@ class Camera
 {
 private:
     //Position of the observer
-    Point3d position;
+    Point3d Position;
     //Orientation of the observer
-    Point3d normal;
+    Point3d Normal;
+    Point3d Oriz;
+    Point3d Vert;
     //info about the kid of view to produce
-    float angle;
-    bool ortho = false;
+    float Angle;
+    bool Ortho = false;
     //vector of the streight lines prgected from the mesh
     std::vector<Ray *> rays;
     Plane2d *plane;
+    std::vector<Point2d*> view;
 
 public:
     Camera(){};
@@ -26,8 +29,11 @@ public:
     Camera(const Camera &);
     ~Camera();
 
+    Point3d getPosition() const{ return Position;};
+    Point3d getNormal() const { return Normal;};
+
     void move_to(Point3d);
-    void rotate(Point3d &);
+    void rotate(Point3d);
     void reset();
     void set_angle(float);
     void orth(bool);

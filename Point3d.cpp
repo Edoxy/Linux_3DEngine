@@ -42,8 +42,16 @@ double Point3d::operator*(Point3d &point)
     return x * point.x + y * point.y + z * point.z;
 }
 
-std::ostream &operator<<(std::ostream &os,const Point3d & p)
+std::ostream &operator<<(std::ostream &os, const Point3d &p)
 {
     os << p.x << " | " << p.y << " | " << p.z << std::endl;
     return os;
+}
+
+Point3d Point3d::x_vett(Point3d &point)
+{
+    double x1 = (y * point.Getz()) - ((z * point.Gety()));
+    double y1 = (z * point.Getx()) - (x * point.Getz());
+    double z1 = (x * point.Gety()) - (y * point.Getx());
+    return Point3d(x1, y1, z1);
 }

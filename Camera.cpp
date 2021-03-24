@@ -7,54 +7,89 @@ using namespace std;
 
 Camera::Camera(Point3d p)
 {
-    position = p;
-    normal = Point3d(1, 0, 0);
-    angle = 50;
+    Position = p;
+    Normal = Point3d(1, 0, 0);
+    Angle = 50;
 }
 
 Camera::Camera(const Camera &cam)
 {
-    position = cam.position;
-    normal = cam.normal;
-    angle = cam.angle;
+    Position = cam.Position;
+    Normal = cam.Normal;
+    Angle = cam.Angle;
+}
+
+Camera::~Camera()
+{
+    delete plane;
 }
 
 void Camera::move_to(Point3d p)
 {
-    position = p;
+    Position = p;
 }
 
-void Camera::rotate(Point3d &p)
+void Camera::rotate(Point3d p)
 {
-    normal = *p.normalize();
+    Normal = *p.normalize();
 }
 
 void Camera::reset()
 {
-    position = Point3d(0, 0, 0);
-    normal = Point3d(1, 0, 0);
-    angle = 20;
+    Position = Point3d(0, 0, 0);
+    Normal = Point3d(1, 0, 0);
+    Angle = 20;
 }
 
 void Camera::set_angle(float f)
 {
-    angle = f;
+    Angle = f;
 }
 
 void Camera::orth(bool is)
 {
-    ortho = is;
+    Ortho = is;
 }
 
 void Camera::compute_rays(const Mesh3d &mesh)
 {
     const int n = mesh.Getn_points();
-    if (!ortho)
+    if (!Ortho)
     {
         for (int i = 0; i < n; i++)
         {
-            Ray *temp_ray = new Ray(*mesh.getPoint(i), position);
+            Ray *temp_ray = new Ray(*mesh.getPoint(i), Position);
             rays.push_back(temp_ray);
+        }
+    }
+}
+
+void Camera::compute_plane()
+{
+    Point3d P_plane = Position + Normal;
+    plane = new Plane2d(Normal, P_plane);
+
+    Oriz = *Point3d(1, -(Normal.Getx() / Normal.Gety()),0).normalize();
+    Vert = Oriz.x_vett(Normal);
+}
+
+void Camera::compute_view()
+{
+    for (Ray* ray : rays)
+    {
+        Point3d p = *plane->compute_intersection(ray);
+        cout << p;
+        Point3d c = plane->getPoint();
+        p = p - c;
+        double nx = p * Oriz;
+        double ny = p * Vert;
+        //check if the point is in the field of view
+        if (abs(nx) < 0.5 && abs(ny) < 0.5)
+        {
+            nx = nx + 0.5;
+            ny = ny + 0.5;
+
+            view.push_back(new Point2d(nx, ny));
         }
     }
 }
@@ -72,3 +107,4 @@ Ray *Camera::GetRay(int i) const
         return rays[i];
     }
 }
+

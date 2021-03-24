@@ -30,4 +30,6 @@ public:
     double operator*(Point3d &);
 
     friend std::ostream &operator<<(std::ostream &, const Point3d &);
+
+    Point3d x_vett(Point3d &);
 };

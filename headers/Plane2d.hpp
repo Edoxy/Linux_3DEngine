@@ -12,6 +12,7 @@ public:
     Plane2d(){};
     Plane2d(Point3d n, Point3d p)
     {
+        //normal and point of application
         Normal = n;
         Point = p;
     };

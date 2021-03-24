@@ -11,7 +11,7 @@ bool test()
     cout << "TESTING 3D POINTS" << endl;
     vector<Point3d *> rnd_mesh;
 
-    const unsigned int UNITS = 2;
+    const unsigned int UNITS = 20;
 
     cout << "COORDINATES:" << endl;
     for (int i = 0; i < UNITS; i++)
@@ -48,6 +48,13 @@ bool test()
     cout << e1 * e2 << endl;
     cout << e2 * e3 << endl;
     cout << e3 * e1 << endl;
+     //TEST SCALAR PRODUCT
+    cout << "TEST VECTORIAL PRODUCT" << endl;
+    cout << e1.x_vett(e2);
+    cout << e2.x_vett(e3);
+    cout << e3.x_vett(e1);
+    cout << e2.x_vett(e1);
+
     ///TESTING MESH 3D
     cout << "TESTING 3D MESH" << endl;
 
@@ -62,8 +69,6 @@ bool test()
         const Point3d *p = mesh->getPoint(i);
         cout << "MESH : " << *p;
     }
-    //TESTING CAMERA
-    cout << "TESTING CAMERA" << endl;
     
     cout << "TESTING PLANE..." << endl;
     Plane2d * pi = new Plane2d(Point3d(2, 0, 0), Point3d(0, 0, 0));
@@ -78,6 +83,15 @@ bool test()
     Point3d * p = pi->compute_intersection(ray);
     cout << "INTERSECTION : " << *p;
 
+    //TESTING CAMERA
+    cout << "TESTING CAMERA" << endl;
+    Camera cam(Point3d(0, 3, 0));
+    cam.rotate(Point3d(0, -2, 0));
+    cout << cam.getPosition() << cam.getNormal();
+    cam.compute_rays(*mesh);
+    cam.compute_plane();
+    cam.compute_view();
+
     cout << "TEST FINISHED" << endl;
     return true;
 }
@@ -85,6 +99,4 @@ bool test()
 int main()
 {
     cout << test();
-
 }
-
