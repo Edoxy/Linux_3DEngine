@@ -4,7 +4,7 @@
 class Display
 {
 private:
-    const static int dim = 60;
+    const static int dim = 80;
     const int sleep = 20;
     char window[dim][dim];
 

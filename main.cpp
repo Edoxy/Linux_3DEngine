@@ -104,26 +104,6 @@ int main()
     fputs("\e[?25l", stdout);
     //cout << test();
     Mesh3d mesh;
-    /*mesh.addPoint(new Point3d(1, 1, 1));
-    mesh.addPoint(new Point3d(0, 1, 1));
-    mesh.addPoint(new Point3d(-1, 1, 1));
-    mesh.addPoint(new Point3d(-1, 0, 1));
-    mesh.addPoint(new Point3d(-1, -1, 1));
-    mesh.addPoint(new Point3d(0, -1, 1));
-    mesh.addPoint(new Point3d(1, -1, 1));
-    mesh.addPoint(new Point3d(1, 0, 1));
-    mesh.addPoint(new Point3d(1, 1, -1));
-    mesh.addPoint(new Point3d(1, 1, 0));
-    mesh.addPoint(new Point3d(0, 1, -1));
-    mesh.addPoint(new Point3d(-1, 1, -1));
-    mesh.addPoint(new Point3d(-1, 1, 0));
-    mesh.addPoint(new Point3d(-1, 0, -1));
-    mesh.addPoint(new Point3d(-1, -1, -1));
-    mesh.addPoint(new Point3d(-1, -1, 0));
-    mesh.addPoint(new Point3d(0, -1, -1));
-    mesh.addPoint(new Point3d(1, -1, -1));
-    mesh.addPoint(new Point3d(1, -1, 0));
-    mesh.addPoint(new Point3d(1, -0, -1));*/
     //creating a CUBE
     const double k = 40;
     for (float i = 1; i <= k; i ++)
@@ -165,12 +145,14 @@ int main()
 
     float t = 0;
 
-    while(t < 6.28)
+    while(t < 2*6.28)
     {
         printf( "\e[2j\e[H" );
         display.Clear();
-        Point3d pos(- radius * sin(t), radius * cos(t), 0);
-        Point3d dir = *Point3d(radius * sin(t), -radius * cos(t), 0).normalize();
+        Point3d pos(- radius * sin(t), radius * cos(t), t -2);
+        Ray tmp;
+        tmp.compute_points(pos, Point3d(0, 0, 0));
+        Point3d dir = tmp.getTangent();
         cam.move_to(pos);
         cam.rotate(dir);
         cam.compute_rays(mesh);
@@ -179,7 +161,7 @@ int main()
         display.Draw(cam);
         cam.reset();
 
-        t = t + 0.0008;
+        t = t + 0.001;
     }
 }
 
