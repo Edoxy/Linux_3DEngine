@@ -41,5 +41,7 @@ public:
     void compute_plane();
     void compute_view();
 
-    Ray *GetRay(int i) const;
+    Ray *getRay(int i) const;
+    Point2d *getView(int i) const;
+    int getnview(){return view.size();};
 };

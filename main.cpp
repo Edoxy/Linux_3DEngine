@@ -62,7 +62,7 @@ bool test()
     for (Point3d *x : rnd_mesh)
     {
         Point3d *p = x->normalize();
-        mesh->addPoint(*p);
+        mesh->addPoint(p);
     }
     for (int i = 0; i < mesh->Getn_points(); i++)
     {
@@ -92,11 +92,62 @@ bool test()
     cam.compute_plane();
     cam.compute_view();
 
+    Display display;
+    display.Clear();
+    display.Draw(cam);
     cout << "TEST FINISHED" << endl;
     return true;
 }
 
 int main()
 {
-    cout << test();
+    fputs("\e[?25l", stdout);
+    //cout << test();
+    Mesh3d mesh;
+    mesh.addPoint(new Point3d(1, 1, 1));
+    mesh.addPoint(new Point3d(0, 1, 1));
+    mesh.addPoint(new Point3d(-1, 1, 1));
+    mesh.addPoint(new Point3d(-1, 0, 1));
+    mesh.addPoint(new Point3d(-1, -1, 1));
+    mesh.addPoint(new Point3d(0, -1, 1));
+    mesh.addPoint(new Point3d(1, -1, 1));
+    mesh.addPoint(new Point3d(1, 0, 1));
+    mesh.addPoint(new Point3d(1, 1, -1));
+    mesh.addPoint(new Point3d(1, 1, 0));
+    mesh.addPoint(new Point3d(0, 1, -1));
+    mesh.addPoint(new Point3d(-1, 1, -1));
+    mesh.addPoint(new Point3d(-1, 1, 0));
+    mesh.addPoint(new Point3d(-1, 0, -1));
+    mesh.addPoint(new Point3d(-1, -1, -1));
+    mesh.addPoint(new Point3d(-1, -1, 0));
+    mesh.addPoint(new Point3d(0, -1, -1));
+    mesh.addPoint(new Point3d(1, -1, -1));
+    mesh.addPoint(new Point3d(1, -1, 0));
+    mesh.addPoint(new Point3d(1, -0, -1));
+
+    const float radius = 4;
+
+    Camera cam(Point3d(0, radius, 0));
+
+    Display display;
+
+    float t = 0;
+
+    while(true)
+    {
+        printf( "\e[2j\e[H" );
+        display.Clear();
+        Point3d pos(- radius * sin(t), radius * cos(t), 0);
+        Point3d dir = *Point3d(radius * sin(t), -radius * cos(t), 0).normalize();
+        cam.move_to(pos);
+        cam.rotate(dir);
+        cam.compute_rays(mesh);
+        cam.compute_plane();
+        cam.compute_view();
+        display.Draw(cam);
+        cam.reset();
+
+        t = t + 0.0006;
+    }
 }
+

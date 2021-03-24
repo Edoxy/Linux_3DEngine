@@ -14,6 +14,6 @@ public:
     ~Mesh3d();
 
     int Getn_points() const { return numberOfPoints; };
-    void addPoint(Point3d &);
+    void addPoint(Point3d *);
     const Point3d *getPoint(int) const;
 };

@@ -15,10 +15,15 @@ Mesh3d::Mesh3d(const Mesh3d &mesh)
     }
 }
 
-void Mesh3d::addPoint(Point3d &point)
+Mesh3d::~Mesh3d()
+{
+
+}
+
+void Mesh3d::addPoint(Point3d *point)
 {
     numberOfPoints++;
-    Points.push_back(&point);
+    Points.push_back(point);
 }
 
 const Point3d *Mesh3d::getPoint(int pos) const

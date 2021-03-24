@@ -1,15 +1,17 @@
 #pragma once
+#include "Camera.hpp"
 
 class Display
 {
 private:
-    const static int dim = 20;
+    const static int dim = 40;
     const int sleep = 20;
     char window[dim][dim];
 
 public:
-    Display(){};
+    Display();
 
-    void Setup();
+    void Setup(){};
+    void Clear();
     void Draw(Camera&);
 };

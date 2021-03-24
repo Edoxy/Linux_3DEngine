@@ -39,6 +39,9 @@ void Camera::reset()
     Position = Point3d(0, 0, 0);
     Normal = Point3d(1, 0, 0);
     Angle = 20;
+    rays.clear();
+    view.clear();
+
 }
 
 void Camera::set_angle(float f)
@@ -58,7 +61,9 @@ void Camera::compute_rays(const Mesh3d &mesh)
     {
         for (int i = 0; i < n; i++)
         {
-            Ray *temp_ray = new Ray(*mesh.getPoint(i), Position);
+            Point3d t = *mesh.getPoint(i);
+            t = t - Position;
+            Ray *temp_ray = new Ray(t, Position);
             rays.push_back(temp_ray);
         }
     }
@@ -78,7 +83,7 @@ void Camera::compute_view()
     for (Ray* ray : rays)
     {
         Point3d p = *plane->compute_intersection(ray);
-        cout << p;
+        //cout << p;
         Point3d c = plane->getPoint();
         p = p - c;
         double nx = p * Oriz;
@@ -94,13 +99,13 @@ void Camera::compute_view()
     }
 }
 
-Ray *Camera::GetRay(int i) const
+Ray *Camera::getRay(int i) const
 {
     if (i >= rays.size())
     {
         cout << "ERROR!: Out of index point" << endl;
-        //Return a reference to a temporary variable
-        return new Ray();
+        //Return a reference to a NULL pointer
+        return NULL;
     }
     else
     {
@@ -108,3 +113,16 @@ Ray *Camera::GetRay(int i) const
     }
 }
 
+Point2d* Camera::getView(int i) const
+{
+    if (i >= view.size())
+    {
+        cout << "ERROR!: Out of index point" << endl;
+        //Return a reference to a Null pointer
+        return NULL;
+    }
+    else
+    {
+        return view[i];
+    }
+}
