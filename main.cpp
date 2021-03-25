@@ -2,7 +2,12 @@
 
 using namespace std;
 
+enum edirection { STOP = 0, LEFT, RIGHT, UP, DOWN };
+edirection DIR = STOP;
+bool CLOSE = false;
+
 bool test()
+
 {
     //test the 3D points class and creation
     cout << "TEST RUNNING..." << endl;
@@ -99,6 +104,33 @@ bool test()
     return true;
 }
 
+void Input()
+{
+    if (_kbhit())
+	{
+		char prova;
+		cin >> prova;
+		switch (prova)
+		{
+		case 'a':
+			DIR = LEFT;
+			break;
+		case 'd':
+			DIR = RIGHT;
+			break;
+		case 'w':
+			DIR = UP;
+			break;
+		case 's':
+			DIR = DOWN;
+			break;
+		case 'x':
+			CLOSE = true;
+			break;
+		}
+	}
+}
+
 int main()
 {
     fputs("\e[?25l", stdout);
@@ -149,29 +181,54 @@ int main()
 
     //setting the camera
     float radius = 4;
-
+    const double ALPHA = 0.1;
     Camera cam(Point3d(0, radius, 0));
 
     Display display;
 
-    float t = 0;
     //render loop
-    while (t < 2 * 6.28)
+    int i = 0;
+    while (!CLOSE)
     {
         printf("\e[2j\e[H");
         display.Clear();
-        Point3d pos(-radius * sin(t), radius * cos(t), t - 6);
+
+        Point3d pos(0, 0, 0);
+        Point3d Right = cam.getVert();
+        Right = Right.scalar(ALPHA);
+        Input();
+        switch (DIR)
+        {
+            case LEFT:
+                break;
+                pos = pos - Right;
+            case RIGHT:
+                pos = pos + Right;
+                break;
+            case UP:
+                pos.Setz(ALPHA);
+                break;
+            case DOWN:
+                pos.Setz(-ALPHA);
+                break;
+            default:
+                break;
+        }
+        Point3d tmp_pos = cam.getPosition();
+        Point3d newpos = pos + tmp_pos;
+
+        cam.move_to(newpos);
         Ray tmp;
-        tmp.compute_points(pos, Point3d(0, 0, 0));
+        tmp.compute_points(cam.getPosition(), Point3d(0, 0, 0));
         Point3d dir = tmp.getTangent();
-        cam.move_to(pos);
+
         cam.rotate(dir);
         cam.compute_rays(mesh);
         cam.compute_plane();
         cam.compute_view();
         display.Draw(cam);
         cam.reset();
-
-        t = t + 0.003;
+        DIR = STOP;
+        i++;
     }
 }

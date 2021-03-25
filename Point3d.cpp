@@ -55,3 +55,11 @@ Point3d Point3d::x_vett(Point3d &point)
     double z1 = (x * point.Gety()) - (y * point.Getx());
     return Point3d(x1, y1, z1);
 }
+
+Point3d Point3d::scalar(double a)
+{
+    double x1 = x * a;
+    double y1 = y * a;
+    double z1 = z * a;
+    return Point3d(x1, y1, z1);
+}

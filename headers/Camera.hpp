@@ -31,6 +31,8 @@ public:
 
     Point3d getPosition() const{ return Position;};
     Point3d getNormal() const { return Normal;};
+    Point3d getOriz() const { return Oriz;};
+    Point3d getVert() const { return Vert;};
 
     void move_to(Point3d);
     void rotate(Point3d);

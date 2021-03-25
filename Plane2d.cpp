@@ -13,7 +13,7 @@ Plane2d::Plane2d(const Plane2d& plane)
 
 Point3d* Plane2d::compute_intersection(Ray* r)
 {
-    const float TOLL = 0.1;
+    const float TOLL = 0.01;
     Ray ray = *r;
     Point3d u = ray.getTangent();
     if(abs(u * Normal) > TOLL)

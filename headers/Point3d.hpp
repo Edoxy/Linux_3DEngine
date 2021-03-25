@@ -32,4 +32,5 @@ public:
     friend std::ostream &operator<<(std::ostream &, const Point3d &);
 
     Point3d x_vett(Point3d &);
+    Point3d scalar(double);
 };

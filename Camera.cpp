@@ -36,9 +36,6 @@ void Camera::rotate(Point3d p)
 
 void Camera::reset()
 {
-    Position = Point3d(0, 0, 0);
-    Normal = Point3d(1, 0, 0);
-    Angle = 20;
     rays.clear();
     view.clear();
 
@@ -87,20 +84,27 @@ void Camera::compute_view()
 {
     for (Ray* ray : rays)
     {
-        Point3d p = *plane->compute_intersection(ray);
-        //cout << p;
-        Point3d c = plane->getPoint();
-        p = p - c;
-        double nx = p * Oriz;
-        double ny = p * Vert;
-        //check if the point is in the field of view
-        if (abs(nx) < 0.5 && abs(ny) < 0.5)
+        Point3d * tmp = plane->compute_intersection(ray);
+        if(tmp == NULL)
         {
-            nx = nx + 0.5;
-            ny = ny + 0.5;
+            cout << "ERROR!: NO INTERSECTION" << endl;
+        }else{
+            Point3d p = *tmp;
+            //cout << p;
+            Point3d c = plane->getPoint();
+            p = p - c;
+            double nx = p * Oriz;
+            double ny = p * Vert;
+            //check if the point is in the field of view
+            if (abs(nx) < 0.5 && abs(ny) < 0.5)
+            {
+                nx = nx + 0.5;
+                ny = ny + 0.5;
 
-            view.push_back(new Point2d(nx, ny));
+                view.push_back(new Point2d(nx, ny));
+            }
         }
+        delete tmp;
     }
 }
 

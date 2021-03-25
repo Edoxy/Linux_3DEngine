@@ -1,6 +1,15 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sys/select.h>
+#include <termios.h>
+#include <stropts.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <stdlib.h>
+#include "headers/getch.h"
+#include "headers/_kbhit.h"
 #include "headers/Point2d.hpp"
 #include "headers/Point3d.hpp"
 #include "headers/Mesh3d.hpp"

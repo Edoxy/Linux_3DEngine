@@ -16,6 +16,6 @@ Ray::Ray(Point3d t, Point3d p, bool is_point)
 
 void Ray::compute_points(Point3d p1, Point3d p2)
 {
-    Tangent = *(p1 - p2).normalize();
+    Tangent = *(p2 - p1).normalize();
     Point = p1;
 }
