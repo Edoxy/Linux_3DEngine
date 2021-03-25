@@ -48,7 +48,7 @@ bool test()
     cout << e1 * e2 << endl;
     cout << e2 * e3 << endl;
     cout << e3 * e1 << endl;
-     //TEST SCALAR PRODUCT
+    //TEST SCALAR PRODUCT
     cout << "TEST VECTORIAL PRODUCT" << endl;
     cout << e1.x_vett(e2);
     cout << e2.x_vett(e3);
@@ -69,18 +69,18 @@ bool test()
         const Point3d *p = mesh->getPoint(i);
         cout << "MESH : " << *p;
     }
-    
+
     cout << "TESTING PLANE..." << endl;
-    Plane2d * pi = new Plane2d(Point3d(2, 0, 0), Point3d(0, 0, 0));
+    Plane2d *pi = new Plane2d(Point3d(2, 0, 0), Point3d(0, 0, 0));
     cout << pi->getNormal() << pi->getPoint();
 
     cout << "TESTING RAY..." << endl;
-    Ray * ray = new Ray(Point3d(-1, 0, 0), Point3d(1, 1, 0));
+    Ray *ray = new Ray(Point3d(-1, 0, 0), Point3d(1, 1, 0));
     cout << ray->getTangent() << ray->getPoint();
 
     cout << "TESTING INTERSECTION" << endl;
- 
-    Point3d * p = pi->compute_intersection(ray);
+
+    Point3d *p = pi->compute_intersection(ray);
     cout << "INTERSECTION : " << *p;
 
     //TESTING CAMERA
@@ -105,38 +105,49 @@ int main()
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
-    const double k = 40;
-    for (float i = 1; i <= k; i ++)
+    const double k = 20;
+    for (float i = 1; i <= 2 * k; i++)
     {
-        mesh.addPoint(new Point3d(i/k, 1, 1));
-        mesh.addPoint(new Point3d(-i/k, 1, 1));
-        mesh.addPoint(new Point3d(1, i/k, 1));
-        mesh.addPoint(new Point3d(1, -i/k, 1));
-        mesh.addPoint(new Point3d(1, 1, i/k));
-        mesh.addPoint(new Point3d(1, 1, -i/k));
+        mesh.addPoint(new Point3d(1 - i / k, 1, 1));
+        mesh.addPoint(new Point3d(1, 1 - i / k, 1));
+        mesh.addPoint(new Point3d(1, 1, 1 - i / k));
 
-        mesh.addPoint(new Point3d(i/k, -1, -1));
-        mesh.addPoint(new Point3d(-i/k, -1, -1));
-        mesh.addPoint(new Point3d(-1, i/k, -1));
-        mesh.addPoint(new Point3d(-1, -i/k, -1));
-        mesh.addPoint(new Point3d(-1, -1, i/k));
-        mesh.addPoint(new Point3d(-1, -1, -i/k));
+        mesh.addPoint(new Point3d(-1 + i / k, -1, -1));
+        mesh.addPoint(new Point3d(-1, -1 + i / k, -1));
+        mesh.addPoint(new Point3d(-1, -1, -1 + i / k));
 
-        mesh.addPoint(new Point3d(i/k, 1, -1));
-        mesh.addPoint(new Point3d(-i/k, 1, -1));
-        mesh.addPoint(new Point3d(1, i/k, -1));
-        mesh.addPoint(new Point3d(1, -i/k, -1));
-        mesh.addPoint(new Point3d(-1, 1, i/k));
-        mesh.addPoint(new Point3d(-1, 1, -i/k));
+        mesh.addPoint(new Point3d(-1 + i / k, 1, -1));
+        mesh.addPoint(new Point3d(-1, 1, -1 + i / k));
 
-        mesh.addPoint(new Point3d(i/k, -1, 1));
-        mesh.addPoint(new Point3d(-i/k, -1, 1));
-        mesh.addPoint(new Point3d(-1, i/k, 1));
-        mesh.addPoint(new Point3d(-1, -i/k, 1));
-        mesh.addPoint(new Point3d(1, -1, i/k));
-        mesh.addPoint(new Point3d(1, -1, -i/k));
+        mesh.addPoint(new Point3d(1, -1, 1 - i / k));
+        mesh.addPoint(new Point3d(1 - i / k, -1, 1));
+
+        mesh.addPoint(new Point3d(1, 1 - i / k, -1));
+        mesh.addPoint(new Point3d(-1, -1 + i / k, 1));
+    }
+    //adding a Piramid inside
+    for (float i = 0; i <= k; i++)
+    {
+        /*mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, -1));
+        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, -1));
+        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, -1));
+        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1));*/
+        mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, -1 + i / k));
+        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, -1 + i / k));
+        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, -1 + i / k));
+        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1 + i / k));
+
+        /*mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, 1));
+        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, 1));
+        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, 1));
+        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, 1));*/
+        mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, 1 - i / k));
+        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, 1 - i / k));
+        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, 1 - i / k));
+        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, 1 - i / k));
     }
 
+    //setting the camera
     float radius = 4;
 
     Camera cam(Point3d(0, radius, 0));
@@ -144,12 +155,12 @@ int main()
     Display display;
 
     float t = 0;
-
-    while(t < 2*6.28)
+    //render loop
+    while (t < 2 * 6.28)
     {
-        printf( "\e[2j\e[H" );
+        printf("\e[2j\e[H");
         display.Clear();
-        Point3d pos(- radius * sin(t), radius * cos(t), t -2);
+        Point3d pos(-radius * sin(t), radius * cos(t), t - 6);
         Ray tmp;
         tmp.compute_points(pos, Point3d(0, 0, 0));
         Point3d dir = tmp.getTangent();
@@ -161,7 +172,6 @@ int main()
         display.Draw(cam);
         cam.reset();
 
-        t = t + 0.001;
+        t = t + 0.003;
     }
 }
-

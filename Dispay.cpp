@@ -31,7 +31,7 @@ void Display::Draw(Camera& cam)
         int x = int(round(p->Getx() * dim));
         int y = int(round(p->Gety() * dim));
 
-        window[x][y] = '+';
+        window[x][y] = '.';
     }
     for(int i = 0; i < dim; i++)
     {
