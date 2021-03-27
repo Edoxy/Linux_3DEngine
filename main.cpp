@@ -2,7 +2,7 @@
 
 using namespace std;
 
-enum edirection { STOP = 0, LEFT, RIGHT, UP, DOWN };
+enum edirection { STOP = 0, LEFT, RIGHT, UP, DOWN, FORWARD, BACKWARD};
 edirection DIR = STOP;
 bool CLOSE = false;
 
@@ -124,6 +124,12 @@ void Input()
 		case 's':
 			DIR = DOWN;
 			break;
+        case 'r':
+            DIR = FORWARD;
+            break;
+        case 'f':
+            DIR = BACKWARD;
+            break;
 		case 'x':
 			CLOSE = true;
 			break;
@@ -137,7 +143,7 @@ int main()
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
-    const double k = 20;
+    const double k = 80;
     for (float i = 1; i <= 2 * k; i++)
     {
         mesh.addPoint(new Point3d(1 - i / k, 1, 1));
@@ -195,21 +201,31 @@ int main()
 
         Point3d pos(0, 0, 0);
         Point3d Right = cam.getVert();
+        Point3d Normal = cam.getNormal();
+        Normal = Normal.scalar(ALPHA);
         Right = Right.scalar(ALPHA);
         Input();
         switch (DIR)
         {
             case LEFT:
+                Right = Right.scalar(-1);
+                pos = Right;
                 break;
-                pos = pos - Right;
             case RIGHT:
-                pos = pos + Right;
+                pos = Right;
                 break;
             case UP:
                 pos.Setz(ALPHA);
                 break;
             case DOWN:
                 pos.Setz(-ALPHA);
+                break;
+            case FORWARD:
+                pos = Normal;
+                break;
+            case BACKWARD:
+                Normal = Normal.scalar(-1);
+                pos = Normal;
                 break;
             default:
                 break;
@@ -226,9 +242,13 @@ int main()
         cam.compute_rays(mesh);
         cam.compute_plane();
         cam.compute_view();
+        cout << cam.getNrays() << " " << cam.getNview() << endl;
         display.Draw(cam);
         cam.reset();
         DIR = STOP;
         i++;
+        cout << i << endl;
+        cout << cam.getNrays() << " " << cam.getNview() << endl;
+        
     }
 }

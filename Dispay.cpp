@@ -25,7 +25,7 @@ void Display::Clear()
 
 void Display::Draw(Camera& cam)
 {
-    for (int i = 0; i < cam.getnview(); i++)
+    for (int i = 0; i < cam.getNview(); i++)
     {
         Point2d *p = cam.getView(i);
         int x = int(round(p->Getx() * dim));

@@ -21,6 +21,8 @@ Camera::Camera(const Camera &cam)
 
 Camera::~Camera()
 {
+    rays.clear();
+    view.clear();
     delete plane;
 }
 
@@ -38,6 +40,7 @@ void Camera::reset()
 {
     rays.clear();
     view.clear();
+    delete plane;
 
 }
 
@@ -85,9 +88,10 @@ void Camera::compute_view()
     for (Ray* ray : rays)
     {
         Point3d * tmp = plane->compute_intersection(ray);
-        if(tmp == NULL)
+        Point3d tan = ray->getTangent();
+        if(tmp == NULL || tan * Normal > 0)
         {
-            cout << "ERROR!: NO INTERSECTION" << endl;
+            //cout << "ERROR!: NO INTERSECTION" << endl;
         }else{
             Point3d p = *tmp;
             //cout << p;

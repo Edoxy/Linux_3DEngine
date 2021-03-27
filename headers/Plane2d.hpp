@@ -17,6 +17,7 @@ public:
         Point = p;
     };
     Plane2d(const Plane2d &);
+    ~Plane2d() {};
 
     Point3d getNormal() const { return Normal; };
     Point3d getPoint() const { return Point; };

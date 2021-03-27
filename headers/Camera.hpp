@@ -21,7 +21,7 @@ private:
     //vector of the streight lines prgected from the mesh
     std::vector<Ray *> rays;
     Plane2d *plane;
-    std::vector<Point2d*> view;
+    std::vector<Point2d *> view;
 
 public:
     Camera(){};
@@ -29,10 +29,13 @@ public:
     Camera(const Camera &);
     ~Camera();
 
-    Point3d getPosition() const{ return Position;};
-    Point3d getNormal() const { return Normal;};
-    Point3d getOriz() const { return Oriz;};
-    Point3d getVert() const { return Vert;};
+    Point3d getPosition() const { return Position; };
+    Point3d getNormal() const { return Normal; };
+    Point3d getOriz() const { return Oriz; };
+    Point3d getVert() const { return Vert; };
+
+    int getNview() const { return view.size(); };
+    int getNrays() const { return rays.size(); };
 
     void move_to(Point3d);
     void rotate(Point3d);
@@ -45,5 +48,4 @@ public:
 
     Ray *getRay(int i) const;
     Point2d *getView(int i) const;
-    int getnview(){return view.size();};
 };

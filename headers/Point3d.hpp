@@ -13,6 +13,7 @@ public:
     Point3d(){};
     Point3d(double, double, double);
     Point3d(const Point3d &);
+    ~Point3d(){};
 
     void Setx(double x1) { x = x1; };
     void Sety(double y1) { y = y1; };

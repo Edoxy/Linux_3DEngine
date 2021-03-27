@@ -11,6 +11,7 @@ private:
 public:
     Ray(){};
     Ray(Point3d, Point3d, bool = false);
+    ~Ray(){};
 
     void setTangent(Point3d t) { Tangent = t; };
     void setPoint(Point3d p) { Point = p; };
