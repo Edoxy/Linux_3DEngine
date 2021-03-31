@@ -9,6 +9,8 @@ private:
     char window[dim][dim];
 
 public:
+    static int n;
+
     Display();
 
     void Setup(){};

@@ -9,15 +9,12 @@ private:
     Point3d Point;
 
 public:
-    Plane2d(){};
-    Plane2d(Point3d n, Point3d p)
-    {
-        //normal and point of application
-        Normal = n;
-        Point = p;
-    };
+    static int n;
+
+    Plane2d(){n ++;};
+    Plane2d(Point3d, Point3d);
     Plane2d(const Plane2d &);
-    ~Plane2d() {};
+    ~Plane2d();
 
     Point3d getNormal() const { return Normal; };
     Point3d getPoint() const { return Point; };

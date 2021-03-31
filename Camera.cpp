@@ -10,6 +10,7 @@ Camera::Camera(Point3d p)
     Position = p;
     Normal = Point3d(1, 0, 0);
     Angle = 50;
+    n++;
 }
 
 Camera::Camera(const Camera &cam)
@@ -17,13 +18,12 @@ Camera::Camera(const Camera &cam)
     Position = cam.Position;
     Normal = cam.Normal;
     Angle = cam.Angle;
+    n++;
 }
 
 Camera::~Camera()
 {
-    rays.clear();
-    view.clear();
-    delete plane;
+    reset();
 }
 
 void Camera::move_to(Point3d p)
@@ -38,10 +38,17 @@ void Camera::rotate(Point3d p)
 
 void Camera::reset()
 {
+    for (Ray* ray : rays)
+    {
+        delete ray;
+    }
+    for (Point2d * p : view)
+    {
+        delete p;
+    }
     rays.clear();
     view.clear();
     delete plane;
-
 }
 
 void Camera::set_angle(float f)
@@ -61,9 +68,8 @@ void Camera::compute_rays(const Mesh3d &mesh)
     {
         for (int i = 0; i < n; i++)
         {
-            Point3d t = *mesh.getPoint(i);
             Ray *tmp_ray = new Ray();
-            tmp_ray->compute_points(t, Position);
+            tmp_ray->compute_points(*mesh.getPoint(i), Position);
             rays.push_back(tmp_ray);
         }
     }

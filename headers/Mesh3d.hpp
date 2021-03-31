@@ -9,7 +9,9 @@ private:
     int numberOfPoints;
 
 public:
-    Mesh3d() { numberOfPoints = 0; };
+    static int n;
+
+    Mesh3d() { numberOfPoints = 0; n++;};
     Mesh3d(const Mesh3d &);
     ~Mesh3d();
 

@@ -1,14 +1,27 @@
 #include <iostream>
 #include <math.h>
-#include "headers/Plane2d.hpp"
+#include "headers/Plane.hpp"
 #include "headers/Point3d.hpp"
 #include "headers/Ray.hpp"
 
 using namespace std;
 
+Plane2d::Plane2d(Point3d n1, Point3d p1)
+{
+    //normal and point of application
+    Normal = n1;
+    Point = p1;
+    n ++;
+}
+
 Plane2d::Plane2d(const Plane2d& plane)
 {
+    n++;
+}
 
+Plane2d::~Plane2d()
+{
+    n--;
 }
 
 Point3d* Plane2d::compute_intersection(Ray* r)

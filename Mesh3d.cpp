@@ -13,6 +13,7 @@ Mesh3d::Mesh3d(const Mesh3d &mesh)
         Point3d *p = new Point3d(*mesh.Points[i]);
         Points.push_back(p);
     }
+    n++;
 }
 
 Mesh3d::~Mesh3d()

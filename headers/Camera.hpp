@@ -4,7 +4,7 @@
 #include <vector>
 #include "Ray.hpp"
 #include "Mesh3d.hpp"
-#include "Plane2d.hpp"
+#include "Plane.hpp"
 
 class Camera
 {
@@ -24,6 +24,8 @@ private:
     std::vector<Point2d *> view;
 
 public:
+    static int n;
+
     Camera(){};
     Camera(Point3d);
     Camera(const Camera &);

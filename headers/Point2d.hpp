@@ -7,7 +7,9 @@ private:
     float y;
 
 public:
-    Point2d();
+    static int n;
+
+    Point2d(){n++;};
     Point2d(float, float);
     Point2d(const Point2d &);
     ~Point2d();

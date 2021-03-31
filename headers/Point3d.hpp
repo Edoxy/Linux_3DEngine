@@ -10,10 +10,12 @@ private:
     double z;
 
 public:
-    Point3d(){};
+    static int n;
+
+    Point3d() { n++; };
     Point3d(double, double, double);
     Point3d(const Point3d &);
-    ~Point3d(){};
+    ~Point3d();
 
     void Setx(double x1) { x = x1; };
     void Sety(double y1) { y = y1; };
@@ -26,8 +28,8 @@ public:
     double norm();
     Point3d *normalize();
 
-    Point3d operator+(Point3d &);
-    Point3d operator-(Point3d &);
+    Point3d operator+(const Point3d &) const;
+    Point3d operator-(const Point3d &) const;
     double operator*(Point3d &);
 
     friend std::ostream &operator<<(std::ostream &, const Point3d &);

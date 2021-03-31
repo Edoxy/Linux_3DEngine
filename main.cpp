@@ -136,6 +136,13 @@ void Input()
 		}
 	}
 }
+int Display::n = 0;
+int Mesh3d::n = 0;
+int Ray::n = 0;
+int Point3d::n = 0;
+int Point2d::n = 0;
+int Plane2d::n = 0;
+int Camera::n = 0;
 
 int main()
 {
@@ -143,7 +150,7 @@ int main()
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
-    const double k = 80;
+    const double k = 1;
     for (float i = 1; i <= 2 * k; i++)
     {
         mesh.addPoint(new Point3d(1 - i / k, 1, 1));
@@ -164,26 +171,20 @@ int main()
         mesh.addPoint(new Point3d(-1, -1 + i / k, 1));
     }
     //adding a Piramid inside
-    for (float i = 0; i <= k; i++)
+    /*for (float i = 0; i <= k; i++)
     {
-        /*mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, -1));
-        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, -1));
-        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, -1));
-        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1));*/
+        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1));
         mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, -1 + i / k));
         mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, -1 + i / k));
         mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, -1 + i / k));
         mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1 + i / k));
 
-        /*mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, 1));
-        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, 1));
-        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, 1));
-        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, 1));*/
+
         mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, 1 - i / k));
         mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, 1 - i / k));
         mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, 1 - i / k));
         mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, 1 - i / k));
-    }
+    }*/
 
     //setting the camera
     float radius = 4;
@@ -196,6 +197,7 @@ int main()
     int i = 0;
     while (!CLOSE)
     {
+        cout << Point3d::n << " " << Ray::n << endl;
         printf("\e[2j\e[H");
         display.Clear();
 
@@ -237,18 +239,24 @@ int main()
         Ray tmp;
         tmp.compute_points(cam.getPosition(), Point3d(0, 0, 0));
         Point3d dir = tmp.getTangent();
-
+        
+        cout << "INIT:   " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
         cam.rotate(dir);
+        cout << "ROTATE: " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
         cam.compute_rays(mesh);
+        cout << "RAYS:   " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
         cam.compute_plane();
+        cout << "PLANE:  " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
         cam.compute_view();
+        cout << "VIEW:   " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
         cout << cam.getNrays() << " " << cam.getNview() << endl;
         display.Draw(cam);
         cam.reset();
+        cout << "RESET:  " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
         DIR = STOP;
         i++;
         cout << i << endl;
         cout << cam.getNrays() << " " << cam.getNview() << endl;
-        
+        cout << "END:    " << Point3d::n << " " << Ray::n << " " << Plane2d::n <<endl;
     }
 }

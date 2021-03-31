@@ -7,6 +7,9 @@ Point3d::Point3d(double x1, double y1, double z1)
     x = x1;
     y = y1;
     z = z1;
+
+    n++;
+    //std::cout << "point created" << std::endl;
 }
 
 Point3d::Point3d(const Point3d &point)
@@ -14,6 +17,15 @@ Point3d::Point3d(const Point3d &point)
     x = point.x;
     y = point.y;
     z = point.z;
+
+    n++;
+    //std::cout << "point copied" << std::endl;
+}
+
+Point3d::~Point3d()
+{
+    n--;
+    //std::cout << "point destroid" << std::endl;
 }
 
 double Point3d::norm()
@@ -27,12 +39,12 @@ Point3d *Point3d::normalize()
     return new Point3d(this->x / norm, this->y / norm, this->z / norm);
 }
 
-Point3d Point3d::operator+(Point3d &point)
+Point3d Point3d::operator+(const Point3d &point) const 
 {
     return Point3d(x + point.x, y + point.y, z + point.z);
 }
 
-Point3d Point3d::operator-(Point3d &point)
+Point3d Point3d::operator-(const Point3d &point) const 
 {
     return Point3d(x - point.x, y - point.y, z - point.z);
 }

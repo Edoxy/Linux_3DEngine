@@ -1,6 +1,7 @@
 #include "headers/Display.hpp"
 #include <iostream>
 
+
 Display::Display()
 {
     for (int i = 0; i < dim; i++)
@@ -10,6 +11,7 @@ Display::Display()
             window[i][j] = ' ';
         }
     }
+    n ++;
 }
 
 void Display::Clear()

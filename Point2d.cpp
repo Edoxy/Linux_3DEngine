@@ -5,12 +5,21 @@ Point2d::Point2d(float x1, float y1)
 {
     x = x1;
     y = y1;
+
+    n++;
 }
 
 Point2d::Point2d(const Point2d &point)
 {
     x = point.x;
     y = point.y;
+
+    n++;
+}
+
+Point2d::~Point2d()
+{
+    n--;
 }
 
 double Point2d::norm(unsigned int n = 2)
