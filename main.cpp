@@ -1,4 +1,6 @@
 #include "header.hpp"
+#include <chrono>
+#include <unistd.h>
 
 using namespace std;
 
@@ -155,9 +157,11 @@ int main()
     Display display;
 
     float t = 0;
+    unsigned int micro_s = 14e3;
     //render loop
     while (t < 2 * 6.28)
     {
+        auto start = chrono::high_resolution_clock::now();
         printf("\e[2j\e[H");
         display.Clear();
         Point3d pos(-radius * sin(t), radius * cos(t), t - 6);
@@ -172,6 +176,13 @@ int main()
         display.Draw(cam);
         cam.reset();
 
-        t = t + 0.003;
+        t += 0.03;
+        usleep(micro_s);
+        auto stop = chrono::high_resolution_clock::now();
+        float duration = chrono::duration_cast<chrono::microseconds>(stop - start).count();
+
+        cout << "FPS =  " << 1000000 / duration << " " << duration << endl;
+
+        //micro_s = (1e6 / 60) - duration.count();
     }
 }
