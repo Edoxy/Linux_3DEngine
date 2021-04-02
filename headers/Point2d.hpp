@@ -10,7 +10,7 @@ public:
     Point2d();
     Point2d(float, float);
     Point2d(const Point2d &);
-    ~Point2d();
+    ~Point2d(){};
 
     float Getx() { return x; };
     float Gety() { return y; };

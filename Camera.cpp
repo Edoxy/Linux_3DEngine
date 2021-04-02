@@ -21,6 +21,7 @@ Camera::Camera(const Camera &cam)
 
 Camera::~Camera()
 {
+    reset();
     delete plane;
 }
 
@@ -36,9 +37,14 @@ void Camera::rotate(Point3d p)
 
 void Camera::reset()
 {
-    Position = Point3d(0, 0, 0);
-    Normal = Point3d(1, 0, 0);
-    Angle = 20;
+    for (Ray *ray : rays)
+    {
+        delete ray;
+    }
+    for (Point2d * p : view)
+    {
+        delete p;
+    }
     rays.clear();
     view.clear();
 
