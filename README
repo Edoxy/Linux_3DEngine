@@ -1,0 +1,3 @@
+memory issue resolved but need to look up all the usage of function returning pointers;
+can optimize all the classes to be more memory efficient
+async the compute rays and the compute viev function
