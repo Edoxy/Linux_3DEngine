@@ -1,8 +1,36 @@
 #include "header.hpp"
 #include <chrono>
 #include <unistd.h>
+#include <memory>
 
 using namespace std;
+
+struct AllocationMetrics
+{
+    uint32_t TotalAllocated = 0;
+    uint32_t TotalFreed = 0;
+
+    uint32_t CurrentUsage() { return TotalAllocated - TotalFreed; }
+};
+
+static AllocationMetrics s_AllocationMetrics;
+
+void* operator new(size_t size)
+{
+    s_AllocationMetrics.TotalAllocated += size;
+    return malloc(size);
+}
+
+void operator delete(void* memory, size_t size)
+{
+    s_AllocationMetrics.TotalFreed += size;
+    free(memory);
+}
+
+static void PrintMemoryUsage()
+{
+    cout << "Memory Usage: " << s_AllocationMetrics.CurrentUsage() << " bytes\n";
+}
 
 bool test()
 {
@@ -37,9 +65,9 @@ bool test()
     cout << "NORMALIZE TEST:" << endl;
     for (Point3d *x : rnd_mesh)
     {
-        Point3d *p = x->normalize();
-        cout << ". : " << *p;
-        cout << p->norm() << endl;
+        Point3d p = x->normalize();
+        cout << ". : " << p;
+        cout << p.norm() << endl;
     }
     //TEST SCALAR PRODUCT
     cout << "TEST SCALAR PRODUCT" << endl;
@@ -63,8 +91,8 @@ bool test()
     Mesh3d *mesh = new Mesh3d();
     for (Point3d *x : rnd_mesh)
     {
-        Point3d *p = x->normalize();
-        mesh->addPoint(p);
+        Point3d p = x->normalize();
+        mesh->addPoint(&p);
     }
     for (int i = 0; i < mesh->Getn_points(); i++)
     {
@@ -107,13 +135,12 @@ int main()
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
-    const double k = 20;
+    const double k = 1000;
     for (float i = 1; i <= 2 * k; i++)
     {
         mesh.addPoint(new Point3d(1 - i / k, 1, 1));
         mesh.addPoint(new Point3d(1, 1 - i / k, 1));
         mesh.addPoint(new Point3d(1, 1, 1 - i / k));
-
         mesh.addPoint(new Point3d(-1 + i / k, -1, -1));
         mesh.addPoint(new Point3d(-1, -1 + i / k, -1));
         mesh.addPoint(new Point3d(-1, -1, -1 + i / k));
@@ -130,19 +157,11 @@ int main()
     //adding a Piramid inside
     for (float i = 0; i <= k; i++)
     {
-        /*mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, -1));
-        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, -1));
-        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, -1));
-        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1));*/
         mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, -1 + i / k));
         mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, -1 + i / k));
         mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, -1 + i / k));
         mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, -1 + i / k));
 
-        /*mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, 1));
-        mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, 1));
-        mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, 1));
-        mesh.addPoint(new Point3d(-1 + i / k, -1 + i / k, 1));*/
         mesh.addPoint(new Point3d(-1 + i / k, 1 - i / k, 1 - i / k));
         mesh.addPoint(new Point3d(1 - i / k, 1 - i / k, 1 - i / k));
         mesh.addPoint(new Point3d(1 - i / k, -1 + i / k, 1 - i / k));
@@ -161,20 +180,29 @@ int main()
     //render loop
     while (t < 2 * 6.28)
     {
-        auto start = chrono::high_resolution_clock::now();
         printf("\e[2j\e[H");
+        PrintMemoryUsage();
+        auto start = chrono::high_resolution_clock::now();
+
         display.Clear();
         Point3d pos(-radius * sin(t), radius * cos(t), t - 6);
         Ray tmp;
         tmp.compute_points(pos, Point3d(0, 0, 0));
         Point3d dir = tmp.getTangent();
+
         cam.move_to(pos);
+
         cam.rotate(dir);
+
         cam.compute_rays(mesh);
+
         cam.compute_plane();
+
         cam.compute_view();
+
         display.Draw(cam);
         cam.reset();
+ 
 
         t += 0.03;
         usleep(micro_s);
@@ -183,6 +211,5 @@ int main()
 
         cout << "FPS =  " << 1000000 / duration << " " << duration << endl;
 
-        //micro_s = (1e6 / 60) - duration.count();
     }
 }

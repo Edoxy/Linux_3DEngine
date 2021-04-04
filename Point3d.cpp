@@ -21,10 +21,10 @@ double Point3d::norm()
     return sqrt(x * x + y * y + z * z);
 }
 
-Point3d *Point3d::normalize()
+Point3d Point3d::normalize()
 {
     const double norm = this->norm();
-    return new Point3d(this->x / norm, this->y / norm, this->z / norm);
+    return Point3d(this->x / norm, this->y / norm, this->z / norm);
 }
 
 Point3d Point3d::operator+(Point3d &point)

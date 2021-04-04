@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Point3d.hpp"
 #include "Point2d.hpp"
 #include <vector>
@@ -20,7 +21,7 @@ private:
     bool Ortho = false;
     //vector of the streight lines prgected from the mesh
     std::vector<Ray *> rays;
-    Plane2d *plane;
+    Plane2d *plane = NULL;
     std::vector<Point2d*> view;
 
 public:

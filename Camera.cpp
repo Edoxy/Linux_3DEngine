@@ -32,7 +32,7 @@ void Camera::move_to(Point3d p)
 
 void Camera::rotate(Point3d p)
 {
-    Normal = *p.normalize();
+    Normal = p.normalize();
 }
 
 void Camera::reset()
@@ -77,15 +77,16 @@ void Camera::compute_rays(const Mesh3d &mesh)
 
 void Camera::compute_plane()
 {
+    delete plane;
     Point3d P_plane = Position + Normal;
     plane = new Plane2d(Normal, P_plane);
 
-    Vert = *Point3d(1, -(Normal.Getx() / Normal.Gety()),0).normalize();
-    Oriz = *Vert.x_vett(Normal).normalize();
+    Vert = Point3d(1, -(Normal.Getx() / Normal.Gety()),0).normalize();
+    Oriz = Vert.x_vett(Normal).normalize();
     if ( Oriz.Getz() < 0)
     {
-        Vert =  *Point3d(-1, (Normal.Getx() / Normal.Gety()),0).normalize();
-        Oriz = *Vert.x_vett(Normal).normalize();
+        Vert = Point3d(-1, (Normal.Getx() / Normal.Gety()),0).normalize();
+        Oriz = Vert.x_vett(Normal).normalize();
     }
 }
 
@@ -93,12 +94,12 @@ void Camera::compute_view()
 {
     for (Ray* ray : rays)
     {
-        Point3d p = *plane->compute_intersection(ray);
+        Point3d *d = plane->compute_intersection(ray);
         //cout << p;
         Point3d c = plane->getPoint();
-        p = p - c;
-        double nx = p * Oriz;
-        double ny = p * Vert;
+        Point3d p = (*d) - c;
+        double nx = (p) * Oriz;
+        double ny = (p) * Vert;
         //check if the point is in the field of view
         if (abs(nx) < 0.5 && abs(ny) < 0.5)
         {
@@ -106,6 +107,7 @@ void Camera::compute_view()
             ny = ny + 0.5;
 
             view.push_back(new Point2d(nx, ny));
+            delete d;
         }
     }
 }

@@ -23,7 +23,7 @@ public:
     const double Getz() const { return z; };
 
     double norm();
-    Point3d *normalize();
+    Point3d normalize();
 
     Point3d operator+(Point3d &);
     Point3d operator-(Point3d &);
