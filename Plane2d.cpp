@@ -11,10 +11,9 @@ Plane2d::Plane2d(const Plane2d& plane)
 
 }
 
-Point3d* Plane2d::compute_intersection(Ray* r)
+Point3d* Plane2d::compute_intersection(const Ray& ray)
 {
     const float TOLL = 0.1;
-    Ray ray = *r;
     Point3d u = ray.getTangent();
     if(abs(u * Normal) > TOLL)
     {

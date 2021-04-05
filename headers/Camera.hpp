@@ -45,4 +45,6 @@ public:
     Ray *getRay(int i) const;
     Point2d *getView(int i) const;
     int getnview(){return view.size();};
+
+    void Parallel(const Mesh3d &);
 };

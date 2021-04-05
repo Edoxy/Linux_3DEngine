@@ -110,7 +110,7 @@ bool test()
 
     cout << "TESTING INTERSECTION" << endl;
 
-    Point3d *p = pi->compute_intersection(ray);
+    Point3d *p = pi->compute_intersection(*ray);
     cout << "INTERSECTION : " << *p;
 
     //TESTING CAMERA
@@ -135,7 +135,7 @@ int main()
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
-    const double k = 1000;
+    const double k = 4000;
     for (float i = 1; i <= 2 * k; i++)
     {
         mesh.addPoint(new Point3d(1 - i / k, 1, 1));

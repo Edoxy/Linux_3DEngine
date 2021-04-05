@@ -22,5 +22,5 @@ public:
     Point3d getPoint() const { return Point; };
 
     void setNormal(const Point3d &n) { Normal = n; };
-    Point3d *compute_intersection(Ray *);
+    Point3d *compute_intersection(const Ray &);
 };

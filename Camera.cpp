@@ -2,6 +2,7 @@
 #include <math.h>
 #include "headers/Camera.hpp"
 #include "headers/Ray.hpp"
+#include <future>
 
 using namespace std;
 
@@ -94,10 +95,12 @@ void Camera::compute_view()
 {
     for (Ray* ray : rays)
     {
-        Point3d *d = plane->compute_intersection(ray);
-        //cout << p;
+        Point3d *d = plane->compute_intersection(*ray);
+
         Point3d c = plane->getPoint();
         Point3d p = (*d) - c;
+        delete d;
+
         double nx = (p) * Oriz;
         double ny = (p) * Vert;
         //check if the point is in the field of view
@@ -107,7 +110,6 @@ void Camera::compute_view()
             ny = ny + 0.5;
 
             view.push_back(new Point2d(nx, ny));
-            delete d;
         }
     }
 }
@@ -138,4 +140,37 @@ Point2d* Camera::getView(int i) const
     {
         return view[i];
     }
+}
+
+static std::mutex view_mutex;
+
+void Camera::Parallel(const Mesh3d & mesh)
+{
+    for (int i = 0; i < mesh.Getn_points(); i++)
+    {
+        const Point3d point = *mesh.getPoint(i);
+        async(launch::async, Process, point);
+    }
+}
+
+static void Process(Point3d& p, Camera& c)
+{
+    Ray ray(p, c.getPosition(), true);
+    Point3d *d = plane->compute_intersection(ray);
+    
+    Point3d c = plane->getPoint();
+    Point3d s = (*d) - c;
+    delete d;
+
+    double nx = Oriz * s;
+    double ny = s * Vert;
+    //check if the point is in the field of view
+    if (abs(nx) < 0.5 && abs(ny) < 0.5)
+    {
+        nx = nx + 0.5;
+        ny = ny + 0.5;
+
+        std::lock_guard<std::mutex> lock(view_mutex);
+        view.push_back(new Point2d(nx, ny));
+    } 
 }
