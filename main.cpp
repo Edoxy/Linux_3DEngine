@@ -5,7 +5,6 @@
 
 using namespace std;
 
-
 struct AllocationMetrics
 {
     uint32_t TotalAllocated = 0;
@@ -16,13 +15,13 @@ struct AllocationMetrics
 
 static AllocationMetrics s_AllocationMetrics;
 
-void* operator new(size_t size)
+void *operator new(size_t size)
 {
     s_AllocationMetrics.TotalAllocated += size;
     return malloc(size);
 }
 
-void operator delete(void* memory, size_t size)
+void operator delete(void *memory, size_t size)
 {
     s_AllocationMetrics.TotalFreed += size;
     free(memory);
@@ -33,14 +32,13 @@ static void PrintMemoryUsage()
     std::cout << "Memory Usage: " << s_AllocationMetrics.CurrentUsage() << " bytes\n";
 }
 
-
 int main()
 {
     fputs("\e[?25l", stdout);
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
-    const double k = 40;
+    const double k = 4000;
     for (float i = 1; i <= 2 * k; i++)
     {
         mesh.addPoint(new Point3d(1 - i / k, 1, 1));
@@ -86,7 +84,7 @@ int main()
     while (t < 2 * 6.28)
     {
         printf("\e[2j\e[H");
-        PrintMemoryUsage();
+        //PrintMemoryUsage();
         auto start = chrono::high_resolution_clock::now();
 
         display.Clear();
@@ -99,20 +97,19 @@ int main()
         cam.Rotate(dir);
 
         cam.Compute_Plane();
-
-        cam.Parallel(mesh);
+        //Don't know why but its faster not to use parallel method
+        cam.Compute_Rays(mesh);
+        cam.Compute_View();
 
         display.Draw(cam);
-        
+
         cam.Reset();
- 
 
         t += 0.03;
         //usleep(micro_s);
         auto stop = chrono::high_resolution_clock::now();
         float duration = chrono::duration_cast<chrono::microseconds>(stop - start).count();
 
-        cout << "FPS =  " << 1000000 / duration << " " << duration << endl;
-
+        cout << "FPS =  " << 1000000 / duration;
     }
 }
