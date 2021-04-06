@@ -11,6 +11,7 @@ private:
 public:
     Ray(){};
     Ray(Point3d, Point3d, bool = false);
+    Ray(const Ray&);
 
     void setTangent(Point3d t) { Tangent = t; };
     void setPoint(Point3d p) { Point = p; };
@@ -18,5 +19,5 @@ public:
     Point3d getTangent() const {return Tangent; };
     Point3d getPoint() const {return Point; };
 
-    void compute_points(Point3d, Point3d);
+    void Compute_Points(Point3d, Point3d);
 };

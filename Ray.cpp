@@ -5,7 +5,7 @@ Ray::Ray(Point3d t, Point3d p, bool is_point)
 {
     if (is_point)
     {
-        compute_points(t, p);
+        Compute_Points(t, p);
     }
     else
     {
@@ -14,8 +14,14 @@ Ray::Ray(Point3d t, Point3d p, bool is_point)
     }
 }
 
-void Ray::compute_points(Point3d p1, Point3d p2)
+Ray::Ray(const Ray& ray)
 {
-    Tangent = (p1 - p2).normalize();
+    Tangent = ray.getTangent();
+    Point = ray.getPoint();
+}
+
+void Ray::Compute_Points(Point3d p1, Point3d p2)
+{
+    Tangent = (p1 - p2).Normalize();
     Point = p1;
 }

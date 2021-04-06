@@ -21,9 +21,9 @@ Point3d* Plane2d::compute_intersection(const Ray& ray)
         Point3d w = P0 - Point;
         double S1 = -(Normal * w)/(Normal * u);
 
-        double x = u.Getx() * S1 + P0.Getx();
-        double y = u.Gety() * S1 + P0.Gety();
-        double z = u.Getz() * S1 + P0.Getz();
+        double x = u.getX() * S1 + P0.getX();
+        double y = u.getY() * S1 + P0.getY();
+        double z = u.getZ() * S1 + P0.getZ();
         return new Point3d(x, y, z);
     }else
     {

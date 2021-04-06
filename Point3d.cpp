@@ -2,56 +2,52 @@
 #include <math.h>
 #include <iostream>
 
-Point3d::Point3d(double x1, double y1, double z1)
+Point3d::Point3d(const Point3d& point)
 {
-    x = x1;
-    y = y1;
-    z = z1;
+	x = point.x;
+	y = point.y;
+	z = point.z;
 }
 
-Point3d::Point3d(const Point3d &point)
+double Point3d::Norm() const
 {
-    x = point.x;
-    y = point.y;
-    z = point.z;
+	double value;
+	value = sqrt(x * x + y * y + z * z);
+	return value;
 }
 
-double Point3d::norm()
+Point3d Point3d::Normalize() const
 {
-    return sqrt(x * x + y * y + z * z);
+	const double norm = Norm();
+	return Point3d(x / norm, y / norm, z / norm);
 }
 
-Point3d Point3d::normalize()
+Point3d Point3d::Vectorial_Product(const Point3d& point) const
 {
-    const double norm = this->norm();
-    return Point3d(this->x / norm, this->y / norm, this->z / norm);
+	double new_x = (y * point.getZ()) - (z * point.getY());
+	double new_y = (z * point.getX()) - (x * point.getZ());
+	double new_z = (x * point.getY()) - (y * point.getX());
+	return Point3d(new_x, new_y, new_z);
 }
 
-Point3d Point3d::operator+(Point3d &point)
+Point3d Point3d::operator+(const Point3d& point) const
 {
-    return Point3d(x + point.x, y + point.y, z + point.z);
+	return Point3d(x + point.getX(), y + point.getY(), z + point.getZ());
 }
 
-Point3d Point3d::operator-(Point3d &point)
+Point3d Point3d::operator-(const Point3d& point) const
 {
-    return Point3d(x - point.x, y - point.y, z - point.z);
+	return Point3d(x - point.getX(), y - point.getY(), z - point.getZ());
 }
 
-double Point3d::operator*(Point3d &point)
+double Point3d::operator*(const Point3d& point) const
 {
-    return x * point.x + y * point.y + z * point.z;
+	double value = x * point.getX() + y * point.getY() + z * point.getZ();
+	return value;
 }
 
-std::ostream &operator<<(std::ostream &os, const Point3d &p)
+std::ostream& operator<<(std::ostream& os, const Point3d& point)
 {
-    os << p.x << " | " << p.y << " | " << p.z << std::endl;
-    return os;
-}
-
-Point3d Point3d::x_vett(Point3d &point)
-{
-    double x1 = (y * point.Getz()) - ((z * point.Gety()));
-    double y1 = (z * point.Getx()) - (x * point.Getz());
-    double z1 = (x * point.Gety()) - (y * point.Getx());
-    return Point3d(x1, y1, z1);
+	os << point.getX() << " | " << point.getY() << " | " << point.getZ() << std::endl;
+	return os;
 }

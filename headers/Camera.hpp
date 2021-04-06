@@ -6,6 +6,7 @@
 #include "Ray.hpp"
 #include "Mesh3d.hpp"
 #include "Plane2d.hpp"
+#include <future>
 
 class Camera
 {
@@ -16,13 +17,12 @@ private:
     Point3d Normal;
     Point3d Oriz;
     Point3d Vert;
-    //info about the kid of view to produce
-    float Angle;
+
     bool Ortho = false;
     //vector of the streight lines prgected from the mesh
     std::vector<Ray *> rays;
     Plane2d *plane = NULL;
-    std::vector<Point2d*> view;
+    std::vector<Point2d *> view;
 
 public:
     Camera(){};
@@ -30,21 +30,25 @@ public:
     Camera(const Camera &);
     ~Camera();
 
-    Point3d getPosition() const{ return Position;};
-    Point3d getNormal() const { return Normal;};
-
-    void move_to(Point3d);
-    void rotate(Point3d);
-    void reset();
-    void set_angle(float);
-    void orth(bool);
-    void compute_rays(const Mesh3d &);
-    void compute_plane();
-    void compute_view();
-
+    Point3d getPosition() const { return Position; };
+    Point3d getNormal() const { return Normal; };
+    Plane2d *getPlane() const { return plane; };
+    Point3d getOriz() { return Oriz; };
+    Point3d getVert() { return Vert; };
     Ray *getRay(int i) const;
     Point2d *getView(int i) const;
-    int getnview(){return view.size();};
+    int getnview() { return view.size(); };
+
+    void pushView(Point2d * p);
+
+    void Move(Point3d);
+    void Rotate(Point3d);
+    void Reset();
+    void Orth(bool);
+    void Compute_Plane();
+    void Compute_Rays(const Mesh3d &);
+    void Compute_View();
 
     void Parallel(const Mesh3d &);
+
 };

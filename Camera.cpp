@@ -10,58 +10,50 @@ Camera::Camera(Point3d p)
 {
     Position = p;
     Normal = Point3d(1, 0, 0);
-    Angle = 50;
 }
 
 Camera::Camera(const Camera &cam)
 {
     Position = cam.Position;
     Normal = cam.Normal;
-    Angle = cam.Angle;
 }
 
 Camera::~Camera()
 {
-    reset();
+    Reset();
     delete plane;
 }
 
-void Camera::move_to(Point3d p)
+void Camera::Move(Point3d p)
 {
     Position = p;
 }
 
-void Camera::rotate(Point3d p)
+void Camera::Rotate(Point3d p)
 {
-    Normal = p.normalize();
+    Normal = p.Normalize();
 }
 
-void Camera::reset()
+void Camera::Reset()
 {
     for (Ray *ray : rays)
     {
         delete ray;
     }
-    for (Point2d * p : view)
+    for (Point2d *p : view)
     {
         delete p;
     }
     rays.clear();
     view.clear();
-
 }
 
-void Camera::set_angle(float f)
-{
-    Angle = f;
-}
-
-void Camera::orth(bool is)
+void Camera::Orth(bool is)
 {
     Ortho = is;
 }
 
-void Camera::compute_rays(const Mesh3d &mesh)
+void Camera::Compute_Rays(const Mesh3d &mesh)
 {
     const int n = mesh.Getn_points();
     if (!Ortho)
@@ -70,30 +62,30 @@ void Camera::compute_rays(const Mesh3d &mesh)
         {
             Point3d t = *mesh.getPoint(i);
             Ray *tmp_ray = new Ray();
-            tmp_ray->compute_points(t, Position);
+            tmp_ray->Compute_Points(t, Position);
             rays.push_back(tmp_ray);
         }
     }
 }
 
-void Camera::compute_plane()
+void Camera::Compute_Plane()
 {
     delete plane;
     Point3d P_plane = Position + Normal;
     plane = new Plane2d(Normal, P_plane);
 
-    Vert = Point3d(1, -(Normal.Getx() / Normal.Gety()),0).normalize();
-    Oriz = Vert.x_vett(Normal).normalize();
-    if ( Oriz.Getz() < 0)
+    Vert = Point3d(1, -(Normal.getX() / Normal.getY()), 0).Normalize();
+    Oriz = Vert.Vectorial_Product(Normal).Normalize();
+    if (Oriz.getZ() < 0)
     {
-        Vert = Point3d(-1, (Normal.Getx() / Normal.Gety()),0).normalize();
-        Oriz = Vert.x_vett(Normal).normalize();
+        Vert = Point3d(-1, (Normal.getX() / Normal.getY()), 0).Normalize();
+        Oriz = Vert.Vectorial_Product(Normal).Normalize();
     }
 }
 
-void Camera::compute_view()
+void Camera::Compute_View()
 {
-    for (Ray* ray : rays)
+    for (Ray *ray : rays)
     {
         Point3d *d = plane->compute_intersection(*ray);
 
@@ -101,8 +93,8 @@ void Camera::compute_view()
         Point3d p = (*d) - c;
         delete d;
 
-        double nx = (p) * Oriz;
-        double ny = (p) * Vert;
+        double nx = (p)*Oriz;
+        double ny = (p)*Vert;
         //check if the point is in the field of view
         if (abs(nx) < 0.5 && abs(ny) < 0.5)
         {
@@ -128,7 +120,7 @@ Ray *Camera::getRay(int i) const
     }
 }
 
-Point2d* Camera::getView(int i) const
+Point2d *Camera::getView(int i) const
 {
     if (i >= view.size())
     {
@@ -142,35 +134,54 @@ Point2d* Camera::getView(int i) const
     }
 }
 
-static std::mutex view_mutex;
-
-void Camera::Parallel(const Mesh3d & mesh)
+void Camera::pushView(Point2d * point)
 {
-    for (int i = 0; i < mesh.Getn_points(); i++)
+    if (point != NULL)
     {
-        const Point3d point = *mesh.getPoint(i);
-        async(launch::async, Process, point);
+        view.push_back(point);
     }
+    return;
 }
 
-static void Process(Point3d& p, Camera& c)
-{
-    Ray ray(p, c.getPosition(), true);
-    Point3d *d = plane->compute_intersection(ray);
-    
-    Point3d c = plane->getPoint();
-    Point3d s = (*d) - c;
-    delete d;
 
-    double nx = Oriz * s;
-    double ny = s * Vert;
-    //check if the point is in the field of view
+
+static std::mutex view_mutex;
+
+static void Process(Point3d point, Camera *camera)
+{
+    Point3d Position = camera->getPosition();
+    Point3d Oriz = camera->getOriz();
+    Point3d Normal = camera->getNormal();
+    Point3d Vert = camera->getVert();
+    Plane2d * plane = camera->getPlane();
+
+    Ray ray(point, Position, true);
+    Point3d * intersection = plane->compute_intersection(ray);
+    Point3d plane_pos = plane->getPoint();
+    Point3d translated = (*intersection) - plane_pos;
+    delete intersection;
+
+    double nx = translated * Oriz;
+    double ny = translated * Vert;
+
     if (abs(nx) < 0.5 && abs(ny) < 0.5)
     {
         nx = nx + 0.5;
         ny = ny + 0.5;
 
         std::lock_guard<std::mutex> lock(view_mutex);
-        view.push_back(new Point2d(nx, ny));
-    } 
+        camera->pushView(new Point2d(nx, ny));
+    }
 }
+
+//std::vector<std::future<void>> v_futures;
+
+void Camera::Parallel(const Mesh3d& mesh)
+{
+    for (int i = 0; i < mesh.Getn_points(); i++)
+    {
+        Point3d point = *mesh.getPoint(i);
+        async(launch::async, Process, point, this);
+    }
+}
+

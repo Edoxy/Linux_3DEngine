@@ -10,26 +10,29 @@ private:
     double z;
 
 public:
-    Point3d(){};
-    Point3d(double, double, double);
-    Point3d(const Point3d &);
+public:
+	Point3d() {};
+	Point3d(double x1 , double y1, double z1) : x(x1), y(y1), z(z1)
+	{}
+	Point3d(const Point3d&);
 
-    void Setx(double x1) { x = x1; };
-    void Sety(double y1) { y = y1; };
-    void Setz(double z1) { z = z1; };
+	double getX() const { return x; };
+	double getY() const { return y; };
+	double getZ() const { return z; };
 
-    const double Getx() const { return x; };
-    const double Gety() const { return y; };
-    const double Getz() const { return z; };
+	void setX(double x1) { x = x1; };
+	void setY(double y1) { y = y1; };
+	void setZ(double z1) { z = z1; };
 
-    double norm();
-    Point3d normalize();
+	//calculate norm of the point
+	double Norm() const;
+	//Vector Normalized
+	Point3d Normalize() const;
+	Point3d Vectorial_Product(const Point3d&) const;
 
-    Point3d operator+(Point3d &);
-    Point3d operator-(Point3d &);
-    double operator*(Point3d &);
+	Point3d operator+(const Point3d&) const;
+	Point3d operator-(const Point3d&) const;
+	double operator*(const Point3d&) const;
 
-    friend std::ostream &operator<<(std::ostream &, const Point3d &);
-
-    Point3d x_vett(Point3d &);
+	friend std::ostream& operator<<(std::ostream&, const Point3d&);
 };
