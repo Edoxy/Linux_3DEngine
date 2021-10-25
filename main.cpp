@@ -106,6 +106,7 @@ bool test()
 
 void Input()
 {
+<<<<<<< Updated upstream
     if (_kbhit())
 	{
 		char prova;
@@ -135,6 +136,9 @@ void Input()
 			break;
 		}
 	}
+=======
+    std::cout << "Memory Usage: " << s_AllocationMetrics.CurrentUsage() / (1024*1024) << " MB\n";
+>>>>>>> Stashed changes
 }
 int Display::n = 0;
 int Mesh3d::n = 0;
@@ -150,7 +154,11 @@ int main()
     //cout << test();
     Mesh3d mesh;
     //creating a CUBE
+<<<<<<< Updated upstream
     const double k = 1;
+=======
+    const double k = 1000;
+>>>>>>> Stashed changes
     for (float i = 1; i <= 2 * k; i++)
     {
         mesh.addPoint(new Point3d(1 - i / k, 1, 1));
@@ -199,6 +207,12 @@ int main()
     {
         cout << Point3d::n << " " << Ray::n << endl;
         printf("\e[2j\e[H");
+<<<<<<< Updated upstream
+=======
+        PrintMemoryUsage();
+        auto start = chrono::high_resolution_clock::now();
+
+>>>>>>> Stashed changes
         display.Clear();
 
         Point3d pos(0, 0, 0);
